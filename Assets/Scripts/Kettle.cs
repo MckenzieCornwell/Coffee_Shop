@@ -9,17 +9,13 @@ public class Kettle : MonoBehaviour
         switch (player.holding)
         {
             case Items.Espresso:
-                Debug.Log("Mixing hot water with an Espresso");
-                player.holding = Items.Americano;
-                Debug.Log("Got " + player.holding);
+                player.pickUp(Items.Americano);
                 break;
             case Items.Cup:
-                Debug.Log("Filling a cup with hot water");
-                player.holding = Items.Hot_Water;
-                Debug.Log("Got " + player.holding);
+                player.pickUp(Items.Water);
                 break;
             default:
-                Debug.Log("I can mix this hot water with an Espresso for an Americano");
+                player.textUpdate("I can mix this hot water with an Espresso for an Americano");
                 break;
         }
     }

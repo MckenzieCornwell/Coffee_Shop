@@ -9,22 +9,16 @@ public class Milk : MonoBehaviour
         switch (player.holding)
         {
             case Items.Espresso:
-                Debug.Log("Mixing milk with an Espresso");
-                player.holding = Items.Cappuccino;
-                Debug.Log("Got " + player.holding);
+                player.pickUp(Items.Cappuccino);
                 break;
             case Items.Cappuccino:
-                Debug.Log("Mixing milk with a Cappuccino");
-                player.holding = Items.Latte;
-                Debug.Log("Got " + player.holding);
+                player.pickUp(Items.Latte);
                 break;
             case Items.Cup:
-                Debug.Log("Filling a cup with milk");
-                player.holding = Items.Milk;
-                Debug.Log("Got " + player.holding);
+                player.pickUp(Items.Milk);
                 break;
             default:
-                Debug.Log("I can mix this milk with an Espresso for a Cappuccino or Latte");
+                player.textUpdate("I can mix this milk with an Espresso for a Cappuccino or Latte");
                 break;
         }
     }

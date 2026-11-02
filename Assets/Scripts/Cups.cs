@@ -8,12 +8,11 @@ public class Cups : MonoBehaviour
     {
         if (player.holding == Items.None)
         {
-            player.holding = Items.Cup;
-            Debug.Log("Got " + player.holding);
+            player.pickUp(Items.Cup);
         }
         else
         {
-            Debug.Log("I'm already holding something");
+            player.textUpdate("I'm already holding something");
         }
     }
 }

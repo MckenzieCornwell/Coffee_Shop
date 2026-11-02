@@ -8,12 +8,12 @@ public class Bin : MonoBehaviour
     {
         if (player.holding != Items.None)
         {
-            Debug.Log("Threw " + player.holding + " away");
-            player.holding = Items.None;
+            player.textUpdate("Threw " + player.holding + " away");
+            player.dropItem();
         }
         else
         {
-            Debug.Log("I can throw something away here");
+            player.textUpdate("I can throw something away here");
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections;
 public class CoffeeMachine : MonoBehaviour
 {
     [SerializeField] private Player player;
+    [SerializeField] private GameObject coffeeCup;
 
     public Items storing = Items.None;
 
@@ -22,17 +23,17 @@ public class CoffeeMachine : MonoBehaviour
                 case Items.Cup:
                     StartCoroutine(CoffeeTimer(waitTime, Items.Espresso));
                     break;
-                case Items.Hot_Water:
+                case Items.Water:
                     StartCoroutine(CoffeeTimer(waitTime, Items.Americano));
                     break;
                 case Items.Milk:
                     StartCoroutine(CoffeeTimer(waitTime, Items.Cappuccino));
                     break;
                 case Items.None:
-                    Debug.Log("I need a cup");
+                    player.textUpdate("I need a cup for an Espresso");
                     break;
                 default:
-                    Debug.Log("This already has coffee in it");
+                    player.textUpdate("This already has coffee in it");
                     break;
             }
         }
@@ -42,18 +43,18 @@ public class CoffeeMachine : MonoBehaviour
             {
                 if (making == false)
                 {
-                    player.holding = storing;
+                    player.pickUp(storing);
                     storing = Items.None;
-                    Debug.Log("Got " + player.holding);
+                    coffeeCup.SetActive(false);
                 }
                 else
                 {
-                    Debug.Log("The coffee machine is running");
+                    player.textUpdate("The coffee machine is running");
                 }
             }
             else
             {
-                Debug.Log("I'm already holding something");
+                player.textUpdate("I'm already holding something");
             }
         }
     }
@@ -61,14 +62,15 @@ public class CoffeeMachine : MonoBehaviour
     private IEnumerator CoffeeTimer(int waitTime, Items result)
     {
         storing = player.holding;
-        player.holding = Items.None;
+        coffeeCup.SetActive(true);
+        player.dropItem();
         making = true;
-        Debug.Log("Making Coffee");
+        player.textUpdate("Making Coffee");
 
         yield return new WaitForSeconds(waitTime);
 
         making = false;
         storing = result;
-        Debug.Log("Coffee is now ready");
+        player.textUpdate("Coffee is now ready");
     }
 }

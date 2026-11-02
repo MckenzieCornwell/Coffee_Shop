@@ -1,14 +1,23 @@
 using UnityEngine;
+using System.Collections;
 
 public class Customer : MonoBehaviour
 {
     [SerializeField] private Player player;
 
-    public Items order = Items.Cappuccino;
+    public Items order;
 
     private int totalCustomers = 3;
 
     private bool beenServed = false;
+
+    private float moveTime = 0.025F;
+
+    void Start()
+    {
+        player.servedText.text = "Customers Served: " + player.customersServed + "/" + totalCustomers;
+        StartCoroutine(NextCustomer(moveTime));
+    }
 
     void OnMouseDown()
     {
@@ -16,28 +25,58 @@ public class Customer : MonoBehaviour
         {
             if (player.holding == order)
             {
-                player.holding = Items.None;
-                Debug.Log("Gave customer their order");
+                player.dropItem();
+                player.textUpdate("Thanks for the coffee");
                 beenServed = true;
                 player.customersServed += 1;
+                player.servedText.text = "Customers Served: " + player.customersServed + "/" + totalCustomers;
 
-                if (player.customersServed >= totalCustomers)
-                {
-                    Debug.Log("All customers served");
-                }
+                StartCoroutine(CustomerLeave(moveTime));
             }
-            else if (player.holding == Items.None)
+            else if (player.holding == Items.None || player.holding == Items.Cup)
             {
-                Debug.Log("I would like a " + order);
+                player.orderText.text = "Order: " + order;
+                player.textUpdate("I would like a " + order);
             }
             else
             {
-                Debug.Log("That's not my order");
+                player.textUpdate("That's not my order");
             }
         }
         else
         {
-            Debug.Log("I've already served this customer");
+            player.textUpdate("I've already served this customer");
+        }
+    }
+
+    private IEnumerator CustomerLeave(float moveTime)
+    {
+        for (int i = 0; i < 30; i++)
+        {
+            transform.position += new Vector3(-0.1F, 0, 0);
+            yield return new WaitForSeconds(moveTime);
+        }
+
+        StartCoroutine(NextCustomer(moveTime));
+    }
+
+    private IEnumerator NextCustomer(float moveTime)
+    {
+        if (player.customersServed >= totalCustomers)
+        {
+            player.textUpdate("All customers are served");
+        }
+        else
+        {
+            beenServed = false;
+            order = (Items)Random.Range(0, 4);
+            player.orderText.text = "Order: ???";
+
+            for (int i = 0; i < 30; i++)
+            {
+                transform.position += new Vector3(0.1F, 0, 0);
+                yield return new WaitForSeconds(moveTime);
+            }
         }
     }
 }
