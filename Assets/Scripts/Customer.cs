@@ -15,8 +15,7 @@ public class Customer : MonoBehaviour
 
     void Start()
     {
-        player.servedText.text = "Customers Served: " + player.customersServed + "/" + totalCustomers;
-        StartCoroutine(NextCustomer(moveTime));
+        ResetGame();
     }
 
     void OnMouseDown()
@@ -64,10 +63,11 @@ public class Customer : MonoBehaviour
     {
         if (player.customersServed >= totalCustomers)
         {
-            player.textUpdate("All customers are served");
+            player.textUpdate("All customers are served. Press R to restart");
         }
         else
         {
+            transform.position = new Vector3(-3, -0.862F, -1);
             beenServed = false;
             order = (Items)Random.Range(0, 4);
             player.orderText.text = "Order: ???";
@@ -78,5 +78,21 @@ public class Customer : MonoBehaviour
                 yield return new WaitForSeconds(moveTime);
             }
         }
+    }
+
+    void Update()
+    {
+
+        if (Input.GetKeyDown("r"))
+        {
+            ResetGame();
+        }
+    }
+
+    void ResetGame()
+    {
+        player.customersServed = 0;
+        player.servedText.text = "Customers Served: " + player.customersServed + "/" + totalCustomers;
+        StartCoroutine(NextCustomer(moveTime));
     }
 }
